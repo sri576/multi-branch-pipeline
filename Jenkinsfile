@@ -20,7 +20,7 @@ pipeline
         {
             steps
             {
-               sh ' mvn clean verify sonar:sonar -Dsonar.projectKey=kubernatives -Dsonar.host.url=http://65.2.152.244:9000 -Dsonar.login=sqp_87efc2000d981a0d7326a23eeed324b7774be379' 
+               sh ' mvn clean verify sonar:sonar -Dsonar.projectKey=kubernatives -Dsonar.host.url=http://65.0.72.145:9000 -Dsonar.login=sqp_87efc2000d981a0d7326a23eeed324b7774be379' 
                
             }
         }
