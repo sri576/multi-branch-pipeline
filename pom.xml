@@ -7,6 +7,13 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
+		
+		<groupId>com.example.projects</groupId>
+  		<artifactId>documentedproject</artifactId>
+  		<packaging>war</packaging>
+  		<version>1.0-SNAPSHOT</version>
+  		<name>Documented Project</name>
+  		<url>http://example.com</url>
 	</parent>
 	<groupId>com.javatechie</groupId>
 	<artifactId>devops-integration</artifactId>
