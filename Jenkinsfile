@@ -1,7 +1,7 @@
 pipeline
 {
 
-    agent any
+    agent 'any'
     tools
     {
         maven 'M2_HOME'
@@ -13,6 +13,12 @@ pipeline
             steps
             {
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sri576/java-war-devops.git']])
+            }
+        }
+        stage('Build')
+        {
+            steps
+            {
                 sh 'mvn clean install package'
             }
         }
@@ -20,31 +26,33 @@ pipeline
         {
             steps
             {
-               sh ' mvn clean verify sonar:sonar -Dsonar.projectKey=kubernatives -Dsonar.host.url=http://65.0.72.145:9000 -Dsonar.login=sqp_87efc2000d981a0d7326a23eeed324b7774be379' 
+               sh ' mvn clean verify sonar:sonar  -Dsonar.projectKey=java-war-commers  -Dsonar.host.url=http://65.0.72.145:9000 -Dsonar.login=sqp_18b5c879374d5e3f5d6f097a88a3e9eae06ca9a8' 
                
             }
         }
+        
         stage('Build docker image')
         {
             steps
             {
                 script
                 {
-                    sh 'docker build -t priya576/kubernetes .'
+                    sh 'docker build -t priya576/kube .'
                 }
             }
         }
+        
         stage('Push image to hub')
         {
             steps
             {
                 script
                 {
-                    withCredentials([string(credentialsId: 'dockerpwd1', variable: 'dockerpwd1')]) 
+                    withCredentials([string(credentialsId: 'dockerid', variable: 'srikanth')]) 
                     {
-                        sh 'docker login -u priya576 -p ${dockerpwd1}'
+                        sh 'docker login -u priya576 -p ${srikanth}'
                     }
-                    sh 'docker push priya576/kubernetes'
+                    sh 'docker push priya576/kube'
                 }
             }
         }    
