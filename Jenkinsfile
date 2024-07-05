@@ -21,13 +21,7 @@ pipeline
                 sh 'mvn clean install package'
             }
         }
-        stage('code analyzing')
-        {
-            steps
-            {
-                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=multi-branch1 -Dsonar.host.url=http://3.108.60.31:9000 -Dsonar.login=two'
-            }
-        }
+        
         stage('image')
         {
             steps
