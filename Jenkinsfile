@@ -1,60 +1,50 @@
 pipeline
 {
-
     agent 'any'
-    tools
+    tools 
     {
         maven 'M2_HOME'
     }
-    stages
+    stages()
     {
-        stage('checkout')
+        stage('scm')
         {
             steps
             {
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sri576/java-war-devops.git']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sri576/multi-branch-pipeline.git']])
             }
         }
-        stage('Build')
+        stage('build')
         {
             steps
             {
                 sh 'mvn clean install package'
             }
         }
-        stage('code quality check')
+        stage('code analyzing')
         {
             steps
             {
-               sh ' mvn clean verify sonar:sonar  -Dsonar.projectKey=java-war-commers  -Dsonar.host.url=http://65.0.72.145:9000 -Dsonar.login=sqp_18b5c879374d5e3f5d6f097a88a3e9eae06ca9a8' 
-               
+                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=multi-branch  -Dsonar.host.url=http://3.108.60.31:9000 -Dsonar.login=sqp_80c590e424098a6b9b949046d9e501c500bdcb8c'
             }
         }
-        
-        stage('Build docker image')
+        stage('image')
         {
             steps
             {
-                script
-                {
-                    sh 'docker build -t priya576/kube .'
-                }
+                sh 'docker build -t priya576/multi .'
             }
         }
-        
-        stage('Push image to hub')
+        stage('push image')
         {
             steps
             {
-                script
+                withCredentials([string(credentialsId: 'Docker-TOKEN', variable: 'srikanth')]) 
                 {
-                    withCredentials([string(credentialsId: 'dockerid', variable: 'srikanth')]) 
-                    {
-                        sh 'docker login -u priya576 -p ${srikanth}'
-                    }
-                    sh 'docker push priya576/kube'
+                    sh 'docker login -u priya576 -p ${srikanth}'
                 }
+                sh 'docker push priya576/multi'
             }
-        }    
+        }
     }
 }
